@@ -25,6 +25,143 @@ local AlazDuels = {}
 
 repeat task.wait() until game:IsLoaded()
 
+-- ============================
+-- KEY SYSTEM
+-- ============================
+local SERVER_URL = "https://alaz-server.onrender.com"
+
+local function getHWID()
+    return game:GetService("RbxAnalyticsService"):GetClientId()
+end
+
+local function checkKey(key)
+    local hwid = getHWID()
+    local ok, result = pcall(function()
+        return game:HttpGet(SERVER_URL .. "/check?key=" .. key .. "&hwid=" .. hwid)
+    end)
+    if not ok then return false, "Server nicht erreichbar!" end
+    local data = game:GetService("HttpService"):JSONDecode(result)
+    return data.success, data.message
+end
+
+-- GUI für Key Eingabe
+local keyGui = Instance.new("ScreenGui")
+keyGui.Name = "AlazKeySystem"
+keyGui.ResetOnSpawn = false
+keyGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
+local bg = Instance.new("Frame", keyGui)
+bg.Size = UDim2.new(1, 0, 1, 0)
+bg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+bg.BackgroundTransparency = 0.3
+bg.BorderSizePixel = 0
+bg.ZIndex = 100
+
+local box = Instance.new("Frame", bg)
+box.Size = UDim2.new(0, 340, 0, 220)
+box.Position = UDim2.new(0.5, -170, 0.5, -110)
+box.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+box.BorderSizePixel = 0
+box.ZIndex = 101
+Instance.new("UICorner", box).CornerRadius = UDim.new(0, 16)
+
+local header = Instance.new("Frame", box)
+header.Size = UDim2.new(1, 0, 0, 60)
+header.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+header.BorderSizePixel = 0
+header.ZIndex = 102
+Instance.new("UICorner", header).CornerRadius = UDim.new(0, 16)
+local headerFill = Instance.new("Frame", header)
+headerFill.Size = UDim2.new(1, 0, 0.5, 0)
+headerFill.Position = UDim2.new(0, 0, 0.5, 0)
+headerFill.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+headerFill.BorderSizePixel = 0
+headerFill.ZIndex = 102
+
+local title = Instance.new("TextLabel", header)
+title.Size = UDim2.new(1, 0, 1, 0)
+title.BackgroundTransparency = 1
+title.Text = "⚔ ALAZ DUELS"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.GothamBlack
+title.TextSize = 20
+title.ZIndex = 103
+
+local subtitle = Instance.new("TextLabel", box)
+subtitle.Size = UDim2.new(1, 0, 0, 25)
+subtitle.Position = UDim2.new(0, 0, 0, 65)
+subtitle.BackgroundTransparency = 1
+subtitle.Text = "Gib deinen Key ein"
+subtitle.TextColor3 = Color3.fromRGB(100, 100, 100)
+subtitle.Font = Enum.Font.Gotham
+subtitle.TextSize = 13
+subtitle.ZIndex = 102
+
+local keyInput = Instance.new("TextBox", box)
+keyInput.Size = UDim2.new(0.85, 0, 0, 42)
+keyInput.Position = UDim2.new(0.075, 0, 0, 100)
+keyInput.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
+keyInput.BorderSizePixel = 0
+keyInput.PlaceholderText = "ALAZ-XXXX-XXXX"
+keyInput.Text = ""
+keyInput.TextColor3 = Color3.fromRGB(0, 0, 0)
+keyInput.Font = Enum.Font.GothamBold
+keyInput.TextSize = 14
+keyInput.ZIndex = 102
+Instance.new("UICorner", keyInput).CornerRadius = UDim.new(0, 10)
+
+local statusLabel = Instance.new("TextLabel", box)
+statusLabel.Size = UDim2.new(1, 0, 0, 20)
+statusLabel.Position = UDim2.new(0, 0, 0, 148)
+statusLabel.BackgroundTransparency = 1
+statusLabel.Text = ""
+statusLabel.TextColor3 = Color3.fromRGB(200, 50, 50)
+statusLabel.Font = Enum.Font.GothamBold
+statusLabel.TextSize = 12
+statusLabel.ZIndex = 102
+
+local submitBtn = Instance.new("TextButton", box)
+submitBtn.Size = UDim2.new(0.85, 0, 0, 38)
+submitBtn.Position = UDim2.new(0.075, 0, 0, 172)
+submitBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+submitBtn.Text = "BESTÄTIGEN"
+submitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+submitBtn.Font = Enum.Font.GothamBold
+submitBtn.TextSize = 14
+submitBtn.ZIndex = 102
+Instance.new("UICorner", submitBtn).CornerRadius = UDim.new(0, 10)
+
+local verified = false
+
+submitBtn.MouseButton1Click:Connect(function()
+    local key = keyInput.Text
+    if key == "" then
+        statusLabel.Text = "Bitte Key eingeben!"
+        statusLabel.TextColor3 = Color3.fromRGB(200, 50, 50)
+        return
+    end
+    submitBtn.Text = "Prüfe..."
+    statusLabel.Text = ""
+    local success, message = checkKey(key)
+    if success then
+        statusLabel.Text = "✓ " .. message
+        statusLabel.TextColor3 = Color3.fromRGB(25, 165, 80)
+        submitBtn.Text = "✓ BESTÄTIGT"
+        submitBtn.BackgroundColor3 = Color3.fromRGB(25, 165, 80)
+        task.wait(1.5)
+        keyGui:Destroy()
+        verified = true
+    else
+        statusLabel.Text = "✗ " .. message
+        statusLabel.TextColor3 = Color3.fromRGB(200, 50, 50)
+        submitBtn.Text = "BESTÄTIGEN"
+    end
+end)
+
+-- Warte bis Key bestätigt
+repeat task.wait(0.1) until verified
+
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
