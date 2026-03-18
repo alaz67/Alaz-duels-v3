@@ -483,13 +483,13 @@ mkToggleLeft("Float",      "Float",     "F", startFloat,  stopFloat)
 -- ══════════════════════════════
 local rightPanel=Instance.new("Frame",sg)
 rightPanel.Name="RightPanel"
-rightPanel.Size=UDim2.new(0,80,0,320)
-rightPanel.Position=UDim2.new(1,-86,0.5,-160)
+rightPanel.Size=UDim2.new(0,75,0,310)
+rightPanel.Position=UDim2.new(1,-81,0,55)
 rightPanel.BackgroundTransparency=1
 rightPanel.ZIndex=10
 
 local rList=Instance.new("UIListLayout",rightPanel)
-rList.Padding=UDim.new(0,5); rList.SortOrder=Enum.SortOrder.LayoutOrder
+rList.Padding=UDim.new(0,4); rList.SortOrder=Enum.SortOrder.LayoutOrder
 rList.HorizontalAlignment=Enum.HorizontalAlignment.Center
 
 local ro=0
@@ -497,7 +497,7 @@ local function nextRO() ro=ro+1; return ro end
 
 local function mkCard(line1, line2, key, onCb, offCb)
     local card=Instance.new("Frame",rightPanel)
-    card.Size=UDim2.new(1,0,0,72); card.BackgroundColor3=CARDBG
+    card.Size=UDim2.new(1,0,0,62); card.BackgroundColor3=CARDBG
     card.BackgroundTransparency=0.1; card.BorderSizePixel=0; card.ZIndex=12; card.LayoutOrder=nextRO()
     Instance.new("UICorner",card).CornerRadius=UDim.new(0,10)
     local cs=Instance.new("UIStroke",card); cs.Color=PINK; cs.Thickness=0; cs.Transparency=1
@@ -505,13 +505,13 @@ local function mkCard(line1, line2, key, onCb, offCb)
     local tl1=Instance.new("TextLabel",card)
     tl1.Size=UDim2.new(1,0,0.48,0); tl1.Position=UDim2.new(0,0,0.04,0)
     tl1.BackgroundTransparency=1; tl1.Text=line1; tl1.TextColor3=PINK
-    tl1.Font=Enum.Font.GothamBlack; tl1.TextSize=12
+    tl1.Font=Enum.Font.GothamBlack; tl1.TextSize=11
     tl1.TextXAlignment=Enum.TextXAlignment.Center; tl1.ZIndex=13
 
     local tl2=Instance.new("TextLabel",card)
     tl2.Size=UDim2.new(1,0,0.38,0); tl2.Position=UDim2.new(0,0,0.46,0)
     tl2.BackgroundTransparency=1; tl2.Text=line2; tl2.TextColor3=PINK
-    tl2.Font=Enum.Font.GothamBold; tl2.TextSize=11
+    tl2.Font=Enum.Font.GothamBold; tl2.TextSize=10
     tl2.TextXAlignment=Enum.TextXAlignment.Center; tl2.ZIndex=13
 
     -- Small toggle dot at bottom
@@ -537,20 +537,20 @@ end
 
 local function mkActionCard(line1, line2, cb)
     local card=Instance.new("TextButton",rightPanel)
-    card.Size=UDim2.new(1,0,0,72); card.BackgroundColor3=CARDBG
+    card.Size=UDim2.new(1,0,0,62); card.BackgroundColor3=CARDBG
     card.BackgroundTransparency=0.1; card.BorderSizePixel=0; card.Text=""; card.ZIndex=12; card.LayoutOrder=nextRO()
     Instance.new("UICorner",card).CornerRadius=UDim.new(0,10)
 
     local tl1=Instance.new("TextLabel",card)
     tl1.Size=UDim2.new(1,0,0.5,0); tl1.Position=UDim2.new(0,0,0.08,0)
     tl1.BackgroundTransparency=1; tl1.Text=line1; tl1.TextColor3=PINK
-    tl1.Font=Enum.Font.GothamBlack; tl1.TextSize=12
+    tl1.Font=Enum.Font.GothamBlack; tl1.TextSize=11
     tl1.TextXAlignment=Enum.TextXAlignment.Center; tl1.ZIndex=13
 
     local tl2=Instance.new("TextLabel",card)
     tl2.Size=UDim2.new(1,0,0.38,0); tl2.Position=UDim2.new(0,0,0.52,0)
     tl2.BackgroundTransparency=1; tl2.Text=line2; tl2.TextColor3=PINK
-    tl2.Font=Enum.Font.GothamBold; tl2.TextSize=11
+    tl2.Font=Enum.Font.GothamBold; tl2.TextSize=10
     tl2.TextXAlignment=Enum.TextXAlignment.Center; tl2.ZIndex=13
 
     card.MouseButton1Click:Connect(cb)
