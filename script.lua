@@ -406,8 +406,8 @@ local C = {
 -- MAIN FRAME (side panel like screenshot)
 local main = Instance.new("Frame", sg)
 main.Name = "Main"
-main.Size = UDim2.new(0,200,0,700)
-main.Position = UDim2.new(1,-210,0.5,-350)
+main.Size = UDim2.new(0,160,0,580)
+main.Position = UDim2.new(1,-170,0.5,-290)
 main.BackgroundColor3 = Color3.fromRGB(20,5,15)
 main.BackgroundTransparency = 0.1
 main.BorderSizePixel = 0
@@ -426,7 +426,7 @@ titleLbl.BackgroundTransparency = 1
 titleLbl.Text = "ALAZ DUEL"
 titleLbl.TextColor3 = C.accent
 titleLbl.Font = Enum.Font.GothamBlack
-titleLbl.TextSize = 20
+titleLbl.TextSize = 16
 titleLbl.TextXAlignment = Enum.TextXAlignment.Center
 titleLbl.ZIndex = 12
 
@@ -471,13 +471,13 @@ end
 -- SLIDER FACTORY (like screenshot style)
 local function mkSlider(title, configKey, mn, mx, cb)
     local cont = Instance.new("Frame",scroll)
-    cont.Size = UDim2.new(1,0,0,58); cont.BackgroundTransparency=1
+    cont.Size = UDim2.new(1,0,0,50); cont.BackgroundTransparency=1
     cont.BorderSizePixel=0; cont.ZIndex=12; cont.LayoutOrder=nextOrder()
 
     local tl = Instance.new("TextLabel",cont)
     tl.Size=UDim2.new(1,-60,0,20); tl.Position=UDim2.new(0,0,0,0)
     tl.BackgroundTransparency=1; tl.Text=title
-    tl.TextColor3=C.white; tl.Font=Enum.Font.GothamBold; tl.TextSize=13
+    tl.TextColor3=C.white; tl.Font=Enum.Font.GothamBold; tl.TextSize=11
     tl.TextXAlignment=Enum.TextXAlignment.Left; tl.ZIndex=13
 
     local valLbl = Instance.new("TextLabel",cont)
@@ -527,7 +527,7 @@ end
 -- TOGGLE FACTORY (like screenshot - full width card with toggle on right)
 local function mkToggle(title, toggleKey, keybind, cb)
     local cont = Instance.new("Frame",scroll)
-    cont.Size=UDim2.new(1,0,0,52); cont.BackgroundColor3=Color3.fromRGB(40,10,30)
+    cont.Size=UDim2.new(1,0,0,44); cont.BackgroundColor3=Color3.fromRGB(40,10,30)
     cont.BackgroundTransparency=0.3; cont.BorderSizePixel=0; cont.ZIndex=12
     cont.LayoutOrder=nextOrder()
     Instance.new("UICorner",cont).CornerRadius=UDim.new(0,10)
@@ -546,7 +546,7 @@ local function mkToggle(title, toggleKey, keybind, cb)
     local xOff = keybind and 44 or 12
     tl.Size=UDim2.new(1,-90,1,0); tl.Position=UDim2.new(0,xOff,0,0)
     tl.BackgroundTransparency=1; tl.Text=title
-    tl.TextColor3=C.accent; tl.Font=Enum.Font.GothamBlack; tl.TextSize=13
+    tl.TextColor3=C.accent; tl.Font=Enum.Font.GothamBlack; tl.TextSize=11
     tl.TextXAlignment=Enum.TextXAlignment.Left; tl.ZIndex=13
 
     local defOn=Toggles[toggleKey] or false
@@ -577,7 +577,7 @@ end
 -- ACTION BUTTON FACTORY
 local function mkActionBtn(title, subtitle, cb)
     local cont=Instance.new("TextButton",scroll)
-    cont.Size=UDim2.new(1,0,0,62); cont.BackgroundColor3=Color3.fromRGB(40,10,30)
+    cont.Size=UDim2.new(1,0,0,52); cont.BackgroundColor3=Color3.fromRGB(40,10,30)
     cont.BackgroundTransparency=0.3; cont.BorderSizePixel=0; cont.Text=""; cont.ZIndex=12
     cont.LayoutOrder=nextOrder()
     Instance.new("UICorner",cont).CornerRadius=UDim.new(0,10)
@@ -585,7 +585,7 @@ local function mkActionBtn(title, subtitle, cb)
     local tl=Instance.new("TextLabel",cont)
     tl.Size=UDim2.new(1,0,0.5,0); tl.Position=UDim2.new(0,0,0.1,0)
     tl.BackgroundTransparency=1; tl.Text=title
-    tl.TextColor3=C.accent; tl.Font=Enum.Font.GothamBlack; tl.TextSize=14
+    tl.TextColor3=C.accent; tl.Font=Enum.Font.GothamBlack; tl.TextSize=12
     tl.TextXAlignment=Enum.TextXAlignment.Center; tl.ZIndex=13
 
     if subtitle then
@@ -672,9 +672,9 @@ end)
 -- MINI TOGGLE BUTTON
 -- ──────────────────────────────────────────────────────────────
 local miniBtn = Instance.new("TextButton",sg)
-miniBtn.Size = UDim2.new(0,50,0,50); miniBtn.Position = UDim2.new(1,-215,0.5,-25)
+miniBtn.Size = UDim2.new(0,50,0,50); miniBtn.Position = UDim2.new(1,-175,0.5,-25)
 miniBtn.BackgroundColor3 = Color3.fromRGB(30,10,20); miniBtn.BackgroundTransparency=0.2
-miniBtn.Text = "S"; miniBtn.TextColor3 = C.accent
+miniBtn.Text = "A"; miniBtn.TextColor3 = C.accent
 miniBtn.Font = Enum.Font.GothamBlack; miniBtn.TextSize = 24
 miniBtn.ZIndex = 999; miniBtn.BorderSizePixel = 0
 Instance.new("UICorner",miniBtn).CornerRadius = UDim.new(0,12)
