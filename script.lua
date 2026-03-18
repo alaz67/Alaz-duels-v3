@@ -67,7 +67,9 @@ local function startSpeed()
         local hrp = getHRP(); if not hrp then return end
         local md = getMoveDir()
         if md.Magnitude > 0.1 then
-            hrp.AssemblyLinearVelocity = Vector3.new(md.X*Config.SpeedBoost, hrp.AssemblyLinearVelocity.Y, md.Z*Config.SpeedBoost)
+            local stealing = Player:GetAttribute("Stealing")
+            local spd = stealing and Config.CarrySpeed or Config.SpeedBoost
+            hrp.AssemblyLinearVelocity = Vector3.new(md.X*spd, hrp.AssemblyLinearVelocity.Y, md.Z*spd)
         end
     end)
 end
@@ -560,9 +562,6 @@ end
 mkCard("BAT",   "AIMBOT",     "BatAimbot",  startAimbot,    stopAimbot)
 mkCard("AUTO",  "LEFT",       "AutoLeft",   startAutoLeft,  stopAutoLeft)
 mkCard("AUTO",  "RIGHT",      "AutoRight",  startAutoRight, stopAutoRight)
-mkCard("CARRY", "MODE",       "CarryMode",  startCarry,     stopCarry)
-mkCard("FLOAT", "MODE",       "FloatMode",  startFloatMode, stopFloatMode)
-mkActionCard("DROP", "ANIMAL", dropAnimal)
 
 -- ══════════════════════════════
 -- TOGGLE ICON (top right, like screenshot)
