@@ -320,8 +320,8 @@ local DIMTXT = Color3.fromRGB(150,50,100)
 -- ══════════════════════════════
 local leftPanel = Instance.new("Frame",sg)
 leftPanel.Name="LeftPanel"
-leftPanel.Size=UDim2.new(0,160,0,420)
-leftPanel.Position=UDim2.new(0.5,-80,0.5,-210)
+leftPanel.Size=UDim2.new(0,170,0,440)
+leftPanel.Position=UDim2.new(0.5,-85,0.5,-220)
 leftPanel.BackgroundColor3=DARKBG
 leftPanel.BackgroundTransparency=0.05
 leftPanel.BorderSizePixel=0
@@ -332,14 +332,14 @@ local lps=Instance.new("UIStroke",leftPanel); lps.Color=PINK; lps.Thickness=1.5
 
 -- Title
 local titleLbl=Instance.new("TextLabel",leftPanel)
-titleLbl.Size=UDim2.new(1,0,0,32); titleLbl.BackgroundTransparency=1
+titleLbl.Size=UDim2.new(1,0,0,35); titleLbl.BackgroundTransparency=1
 titleLbl.Text="ALAZ DUEL"; titleLbl.TextColor3=PINK
-titleLbl.Font=Enum.Font.GothamBlack; titleLbl.TextSize=13
+titleLbl.Font=Enum.Font.GothamBlack; titleLbl.TextSize=14
 titleLbl.TextXAlignment=Enum.TextXAlignment.Center; titleLbl.ZIndex=11
 
 -- Scroll inside left panel
 local lScroll=Instance.new("ScrollingFrame",leftPanel)
-lScroll.Size=UDim2.new(1,0,1,-35); lScroll.Position=UDim2.new(0,0,0,33)
+lScroll.Size=UDim2.new(1,0,1,-38); lScroll.Position=UDim2.new(0,0,0,36)
 lScroll.BackgroundTransparency=1; lScroll.BorderSizePixel=0
 lScroll.ScrollBarThickness=3; lScroll.ScrollBarImageColor3=PINK
 lScroll.CanvasSize=UDim2.new(0,0,0,0); lScroll.AutomaticCanvasSize=Enum.AutomaticSize.Y
@@ -365,19 +365,19 @@ end
 
 local function mkSlider(title, configKey, mn, mx)
     local cont=Instance.new("Frame",lScroll)
-    cont.Size=UDim2.new(1,0,0,40); cont.BackgroundColor3=CARDBG
+    cont.Size=UDim2.new(1,0,0,36); cont.BackgroundColor3=CARDBG
     cont.BackgroundTransparency=0.2; cont.BorderSizePixel=0; cont.ZIndex=12; cont.LayoutOrder=nextLO()
     Instance.new("UICorner",cont).CornerRadius=UDim.new(0,8)
 
     local tl=Instance.new("TextLabel",cont)
     tl.Size=UDim2.new(0.7,0,0,20); tl.Position=UDim2.new(0,10,0,4)
     tl.BackgroundTransparency=1; tl.Text=title; tl.TextColor3=PINK
-    tl.Font=Enum.Font.GothamBold; tl.TextSize=10; tl.TextXAlignment=Enum.TextXAlignment.Left; tl.ZIndex=13
+    tl.Font=Enum.Font.GothamBold; tl.TextSize=12; tl.TextXAlignment=Enum.TextXAlignment.Left; tl.ZIndex=13
 
     local vl=Instance.new("TextLabel",cont)
     vl.Size=UDim2.new(0.28,0,0,20); vl.Position=UDim2.new(0.72,0,0,4)
     vl.BackgroundTransparency=1; vl.Text=tostring(Config[configKey])
-    vl.TextColor3=WHITE; vl.Font=Enum.Font.GothamBold; vl.TextSize=10
+    vl.TextColor3=WHITE; vl.Font=Enum.Font.GothamBold; vl.TextSize=12
     vl.TextXAlignment=Enum.TextXAlignment.Right; vl.ZIndex=13
 
     local track=Instance.new("Frame",cont)
@@ -418,7 +418,7 @@ end
 
 local function mkToggleLeft(title, key, keybindTxt, onCb, offCb)
     local cont=Instance.new("Frame",lScroll)
-    cont.Size=UDim2.new(1,0,0,34); cont.BackgroundColor3=CARDBG
+    cont.Size=UDim2.new(1,0,0,36); cont.BackgroundColor3=CARDBG
     cont.BackgroundTransparency=0.2; cont.BorderSizePixel=0; cont.ZIndex=12; cont.LayoutOrder=nextLO()
     Instance.new("UICorner",cont).CornerRadius=UDim.new(0,8)
 
@@ -435,7 +435,7 @@ local function mkToggleLeft(title, key, keybindTxt, onCb, offCb)
     local tl=Instance.new("TextLabel",cont)
     tl.Size=UDim2.new(1,-85,1,0); tl.Position=UDim2.new(0,xOff,0,0)
     tl.BackgroundTransparency=1; tl.Text=title; tl.TextColor3=PINK
-    tl.Font=Enum.Font.GothamBold; tl.TextSize=10
+    tl.Font=Enum.Font.GothamBold; tl.TextSize=12
     tl.TextXAlignment=Enum.TextXAlignment.Left; tl.ZIndex=13
 
     local defOn=Toggles[key] or false
@@ -481,8 +481,8 @@ mkToggleLeft("Float",      "Float",     "F", startFloat,  stopFloat)
 -- ══════════════════════════════
 local rightPanel=Instance.new("Frame",sg)
 rightPanel.Name="RightPanel"
-rightPanel.Size=UDim2.new(0,70,0,420)
-rightPanel.Position=UDim2.new(1,-76,0.5,-210)
+rightPanel.Size=UDim2.new(0,80,0,500)
+rightPanel.Position=UDim2.new(1,-86,0.5,-250)
 rightPanel.BackgroundTransparency=1
 rightPanel.ZIndex=10
 
@@ -495,7 +495,7 @@ local function nextRO() ro=ro+1; return ro end
 
 local function mkCard(line1, line2, key, onCb, offCb)
     local card=Instance.new("Frame",rightPanel)
-    card.Size=UDim2.new(1,0,0,55); card.BackgroundColor3=CARDBG
+    card.Size=UDim2.new(1,0,0,72); card.BackgroundColor3=CARDBG
     card.BackgroundTransparency=0.1; card.BorderSizePixel=0; card.ZIndex=12; card.LayoutOrder=nextRO()
     Instance.new("UICorner",card).CornerRadius=UDim.new(0,10)
     local cs=Instance.new("UIStroke",card); cs.Color=PINK; cs.Thickness=0; cs.Transparency=1
@@ -503,13 +503,13 @@ local function mkCard(line1, line2, key, onCb, offCb)
     local tl1=Instance.new("TextLabel",card)
     tl1.Size=UDim2.new(1,0,0.48,0); tl1.Position=UDim2.new(0,0,0.04,0)
     tl1.BackgroundTransparency=1; tl1.Text=line1; tl1.TextColor3=PINK
-    tl1.Font=Enum.Font.GothamBlack; tl1.TextSize=10
+    tl1.Font=Enum.Font.GothamBlack; tl1.TextSize=12
     tl1.TextXAlignment=Enum.TextXAlignment.Center; tl1.ZIndex=13
 
     local tl2=Instance.new("TextLabel",card)
     tl2.Size=UDim2.new(1,0,0.38,0); tl2.Position=UDim2.new(0,0,0.46,0)
     tl2.BackgroundTransparency=1; tl2.Text=line2; tl2.TextColor3=PINK
-    tl2.Font=Enum.Font.GothamBold; tl2.TextSize=9
+    tl2.Font=Enum.Font.GothamBold; tl2.TextSize=11
     tl2.TextXAlignment=Enum.TextXAlignment.Center; tl2.ZIndex=13
 
     -- Small toggle dot at bottom
@@ -535,20 +535,20 @@ end
 
 local function mkActionCard(line1, line2, cb)
     local card=Instance.new("TextButton",rightPanel)
-    card.Size=UDim2.new(1,0,0,55); card.BackgroundColor3=CARDBG
+    card.Size=UDim2.new(1,0,0,72); card.BackgroundColor3=CARDBG
     card.BackgroundTransparency=0.1; card.BorderSizePixel=0; card.Text=""; card.ZIndex=12; card.LayoutOrder=nextRO()
     Instance.new("UICorner",card).CornerRadius=UDim.new(0,10)
 
     local tl1=Instance.new("TextLabel",card)
     tl1.Size=UDim2.new(1,0,0.5,0); tl1.Position=UDim2.new(0,0,0.08,0)
     tl1.BackgroundTransparency=1; tl1.Text=line1; tl1.TextColor3=PINK
-    tl1.Font=Enum.Font.GothamBlack; tl1.TextSize=10
+    tl1.Font=Enum.Font.GothamBlack; tl1.TextSize=12
     tl1.TextXAlignment=Enum.TextXAlignment.Center; tl1.ZIndex=13
 
     local tl2=Instance.new("TextLabel",card)
     tl2.Size=UDim2.new(1,0,0.38,0); tl2.Position=UDim2.new(0,0,0.52,0)
     tl2.BackgroundTransparency=1; tl2.Text=line2; tl2.TextColor3=PINK
-    tl2.Font=Enum.Font.GothamBold; tl2.TextSize=9
+    tl2.Font=Enum.Font.GothamBold; tl2.TextSize=11
     tl2.TextXAlignment=Enum.TextXAlignment.Center; tl2.ZIndex=13
 
     card.MouseButton1Click:Connect(cb)
@@ -568,7 +568,7 @@ mkActionCard("DROP", "ANIMAL", dropAnimal)
 -- TOGGLE ICON (top right, like screenshot)
 -- ══════════════════════════════
 local iconBtn=Instance.new("TextButton",sg)
-iconBtn.Size=UDim2.new(0,48,0,48)
+iconBtn.Size=UDim2.new(0,50,0,50)
 iconBtn.Position=UDim2.new(0,5,0,5)
 iconBtn.BackgroundColor3=Color3.fromRGB(25,8,20)
 iconBtn.BackgroundTransparency=0.1
