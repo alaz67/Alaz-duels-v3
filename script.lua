@@ -483,8 +483,8 @@ mkToggleLeft("Float",      "Float",     "F", startFloat,  stopFloat)
 -- ══════════════════════════════
 local rightPanel=Instance.new("Frame",sg)
 rightPanel.Name="RightPanel"
-rightPanel.Size=UDim2.new(0,80,0,500)
-rightPanel.Position=UDim2.new(1,-86,0.5,-250)
+rightPanel.Size=UDim2.new(0,80,0,236)
+rightPanel.Position=UDim2.new(1,-86,0.5,-118)
 rightPanel.BackgroundTransparency=1
 rightPanel.ZIndex=10
 
