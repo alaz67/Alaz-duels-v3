@@ -483,8 +483,8 @@ mkToggleLeft("Float",      "Float",     "F", startFloat,  stopFloat)
 -- ══════════════════════════════
 local rightPanel=Instance.new("Frame",sg)
 rightPanel.Name="RightPanel"
-rightPanel.Size=UDim2.new(0,80,0,236)
-rightPanel.Position=UDim2.new(1,-86,0.5,-118)
+rightPanel.Size=UDim2.new(0,80,0,320)
+rightPanel.Position=UDim2.new(1,-86,0.5,-160)
 rightPanel.BackgroundTransparency=1
 rightPanel.ZIndex=10
 
@@ -559,6 +559,7 @@ local function mkActionCard(line1, line2, cb)
 end
 
 -- Populate right panel
+mkCard("AUTO",  "GRAB",       "AutoSteal",  startAutoSteal,  stopAutoSteal)
 mkCard("BAT",   "AIMBOT",     "BatAimbot",  startAimbot,    stopAimbot)
 mkCard("AUTO",  "LEFT",       "AutoLeft",   startAutoLeft,  stopAutoLeft)
 mkCard("AUTO",  "RIGHT",      "AutoRight",  startAutoRight, stopAutoRight)
