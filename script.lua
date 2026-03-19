@@ -17,23 +17,27 @@ local Player           = Players.LocalPlayer
 -- CONFIG
 -- ──────────────────────────────────────────────────────────────
 local Config = {
-    SpeedBoost  = 60.0,
-    CarrySpeed  = 29.5,
-    HopPower    = 50.0,
-    Gravity     = 70.0,
-    SpinSpeed   = 19.0,
+    SpeedBoost    = 60.0,
+    CarrySpeed    = 29.5,
+    HopPower      = 50.0,
+    Gravity       = 70.0,
+    SpinSpeed     = 19.0,
+    FOV           = 70.0,
+    StealDuration = 0.3,
 }
 
 local Toggles = {
-    VoidMode   = false,
-    SpinBot    = false,
-    Unwalk     = false,
-    Float      = false,
-    BatAimbot  = false,
-    AutoLeft   = false,
-    AutoRight  = false,
-    CarryMode  = false,
-    FloatMode  = false,
+    VoidMode     = false,
+    SpinBot      = false,
+    Unwalk       = false,
+    Float        = false,
+    BatAimbot    = false,
+    AutoLeft     = false,
+    AutoRight    = false,
+    AntiRagdoll  = false,
+    PlayerESP    = false,
+    OptimizerXRay= false,
+    AutoPlay     = false,
 }
 
 local guiVisible   = true
@@ -353,7 +357,7 @@ local function startAutoSteal()
     if Connections.steal then return end
     Connections.steal = RunService.Heartbeat:Connect(function()
         if not Toggles_AutoSteal then return end
-        if tick() - lastSteal < 0.3 then return end
+        if tick() - lastSteal < Config.StealDuration then return end
         local prompt = findNearestPrompt()
         if prompt and prompt.Parent then
             lastSteal = tick()
@@ -365,6 +369,125 @@ end
 local function stopAutoSteal()
     Toggles_AutoSteal = false
     if Connections.steal then Connections.steal:Disconnect(); Connections.steal = nil end
+end
+
+
+-- ──────────────────────────────────────────────────────────────
+-- ANTI RAGDOLL
+-- ──────────────────────────────────────────────────────────────
+local function startAntiRagdoll()
+    if Connections.antiRag then return end
+    Connections.antiRag = RunService.Heartbeat:Connect(function()
+        if not Toggles.AntiRagdoll then return end
+        local char = Player.Character; if not char then return end
+        local hum  = char:FindFirstChildOfClass("Humanoid")
+        local root = char:FindFirstChild("HumanoidRootPart")
+        if hum then
+            local s = hum:GetState()
+            if s==Enum.HumanoidStateType.Physics or s==Enum.HumanoidStateType.Ragdoll or s==Enum.HumanoidStateType.FallingDown then
+                hum:ChangeState(Enum.HumanoidStateType.Running)
+                workspace.CurrentCamera.CameraSubject = hum
+                if root then root.AssemblyLinearVelocity=Vector3.zero; root.AssemblyAngularVelocity=Vector3.zero end
+            end
+        end
+        for _, obj in ipairs(char:GetDescendants()) do
+            if obj:IsA("Motor6D") and not obj.Enabled then obj.Enabled = true end
+        end
+    end)
+end
+local function stopAntiRagdoll()
+    if Connections.antiRag then Connections.antiRag:Disconnect(); Connections.antiRag = nil end
+end
+
+-- ──────────────────────────────────────────────────────────────
+-- PLAYER ESP
+-- ──────────────────────────────────────────────────────────────
+local playerESP = {}
+local function enablePlayerESP()
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= Player and p.Character and not playerESP[p] then
+            local hl = Instance.new("Highlight")
+            hl.Adornee = p.Character
+            hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+            hl.FillTransparency = 1
+            hl.OutlineColor = Color3.fromRGB(220,0,120)
+            hl.OutlineTransparency = 0
+            hl.Parent = Player.PlayerGui
+            playerESP[p] = hl
+        end
+    end
+end
+local function disablePlayerESP()
+    for p, hl in pairs(playerESP) do
+        pcall(function() hl:Destroy() end)
+        playerESP[p] = nil
+    end
+end
+Players.PlayerRemoving:Connect(function(p)
+    if playerESP[p] then pcall(function() playerESP[p]:Destroy() end); playerESP[p] = nil end
+end)
+
+-- ──────────────────────────────────────────────────────────────
+-- OPTIMIZER + XRAY
+-- ──────────────────────────────────────────────────────────────
+local function enableOptimizerXRay()
+    pcall(function()
+        Lighting.GlobalShadows = false
+        Lighting.Brightness = 5
+        settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            pcall(function()
+                if obj:IsA("BasePart") then obj.CastShadow = false end
+                if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") then obj.Enabled = false end
+            end)
+        end
+    end)
+end
+local function disableOptimizerXRay()
+    pcall(function()
+        Lighting.GlobalShadows = true
+        Lighting.Brightness = 2
+        settings().Rendering.QualityLevel = Enum.QualityLevel.Automatic
+    end)
+end
+
+-- ──────────────────────────────────────────────────────────────
+-- AUTO PLAY (auto rejoin duels)
+-- ──────────────────────────────────────────────────────────────
+local function startAutoPlay()
+    if Connections.autoPlay then return end
+    Connections.autoPlay = RunService.Heartbeat:Connect(function()
+        if not Toggles.AutoPlay then return end
+        pcall(function()
+            local gui = Player.PlayerGui
+            local playBtn = gui:FindFirstChild("Play", true)
+            if playBtn and playBtn:IsA("TextButton") then
+                playBtn.MouseButton1Click:Fire()
+            end
+        end)
+    end)
+end
+local function stopAutoPlay()
+    if Connections.autoPlay then Connections.autoPlay:Disconnect(); Connections.autoPlay = nil end
+end
+
+-- ──────────────────────────────────────────────────────────────
+-- CONFIG SAVE/LOAD
+-- ──────────────────────────────────────────────────────────────
+local function saveConfig()
+    pcall(function()
+        local data = {
+            SpeedBoost  = Config.SpeedBoost,
+            CarrySpeed  = Config.CarrySpeed,
+            HopPower    = Config.HopPower,
+            Gravity     = Config.Gravity,
+            SpinSpeed   = Config.SpinSpeed,
+            FOV         = Config.FOV,
+        }
+        if writefile then
+            writefile("AlazDuel_Config.json", game:GetService("HttpService"):JSONEncode(data))
+        end
+    end)
 end
 
 -- ──────────────────────────────────────────────────────────────
@@ -472,6 +595,7 @@ local function mkSlider(title, configKey, mn, mx)
         vl.Text=tostring(val); Config[configKey]=val
         if configKey=="Gravity" then updateGravity() end
         if configKey=="SpinSpeed" and spinBAV then spinBAV.AngularVelocity=Vector3.new(0,val,0) end
+        if configKey=="FOV" then pcall(function() workspace.CurrentCamera.FieldOfView=val end) end
     end
     sBtn.MouseButton1Down:Connect(function() dragging=true end)
     UserInputService.InputEnded:Connect(function(i) if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then dragging=false end end)
@@ -541,6 +665,20 @@ mkToggleLeft("Spin Bot",   "SpinBot",   nil, startSpin,   stopSpin)
 mkSlider("Spin Speed", "SpinSpeed", 0,  80)
 mkToggleLeft("Unwalk",     "Unwalk",    nil, startUnwalk, stopUnwalk)
 mkToggleLeft("Float",      "Float",     "F", startFloat,  stopFloat)
+mkSectionLbl("COMBAT")
+mkToggleLeft("Anti Ragdoll", "AntiRagdoll", nil, startAntiRagdoll, stopAntiRagdoll)
+mkToggleLeft("Auto Play",    "AutoPlay",    nil, startAutoPlay,    stopAutoPlay)
+mkToggleLeft("Auto Steal",   nil,           nil, startAutoSteal,   stopAutoSteal)
+mkSectionLbl("VISUALS")
+mkToggleLeft("Player ESP",      "PlayerESP",     nil, enablePlayerESP,    disablePlayerESP)
+mkToggleLeft("Optimizer+XRay",  "OptimizerXRay", nil, enableOptimizerXRay,disableOptimizerXRay)
+mkSectionLbl("SETTINGS")
+mkSlider("FOV",            "FOV",           40, 120)
+mkSlider("Steal Duration", "StealDuration", 0,  2.0)
+mkSectionLbl("KEYBINDS")
+mkToggleLeft("Auto Left  [Z]",  "AutoLeft",  "Z", startAutoLeft,  stopAutoLeft)
+mkToggleLeft("Auto Right [C]",  "AutoRight", "C", startAutoRight, stopAutoRight)
+mkToggleLeft("Bat Aimbot [E]",  "BatAimbot", "E", startAimbot,    stopAimbot)
 
 -- ══════════════════════════════
 -- RIGHT PANEL (Cards)
@@ -663,10 +801,10 @@ end)
 UserInputService.InputBegan:Connect(function(inp,gpe)
     if gpe then return end
     if inp.KeyCode==Enum.KeyCode.U then guiVisible=not guiVisible; leftPanel.Visible=guiVisible end
-    if inp.KeyCode==Enum.KeyCode.F then
-        Toggles.Float=not Toggles.Float
-        if Toggles.Float then startFloat() else stopFloat() end
-    end
+    if inp.KeyCode==Enum.KeyCode.F then Toggles.Float=not Toggles.Float; if Toggles.Float then startFloat() else stopFloat() end end
+    if inp.KeyCode==Enum.KeyCode.Z then Toggles.AutoLeft=not Toggles.AutoLeft; if Toggles.AutoLeft then startAutoLeft() else stopAutoLeft() end end
+    if inp.KeyCode==Enum.KeyCode.C then Toggles.AutoRight=not Toggles.AutoRight; if Toggles.AutoRight then startAutoRight() else stopAutoRight() end end
+    if inp.KeyCode==Enum.KeyCode.E then Toggles.BatAimbot=not Toggles.BatAimbot; if Toggles.BatAimbot then startAimbot() else stopAimbot() end end
 end)
 
 -- ──────────────────────────────────────────────────────────────
