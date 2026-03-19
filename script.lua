@@ -303,6 +303,70 @@ local function dropAnimal()
     local hum=getHum(); if hum then hum:UnequipTools() end
 end
 
+
+-- ──────────────────────────────────────────────────────────────
+-- AUTO STEAL
+-- ──────────────────────────────────────────────────────────────
+local isStealing = false
+local lastSteal  = 0
+
+local function isMyPlot(name)
+    local plots = workspace:FindFirstChild("Plots"); if not plots then return false end
+    local plot = plots:FindFirstChild(name); if not plot then return false end
+    local sign = plot:FindFirstChild("PlotSign")
+    if sign then local yb=sign:FindFirstChild("YourBase"); if yb and yb:IsA("BillboardGui") then return yb.Enabled end end
+    return false
+end
+
+local function findNearestPrompt()
+    local hrp = getHRP(); if not hrp then return nil end
+    local plots = workspace:FindFirstChild("Plots"); if not plots then return nil end
+    local np, nd = nil, math.huge
+    for _, plot in ipairs(plots:GetChildren()) do
+        if isMyPlot(plot.Name) then continue end
+        local pods = plot:FindFirstChild("AnimalPodiums"); if not pods then continue end
+        for _, pod in ipairs(pods:GetChildren()) do
+            pcall(function()
+                local base  = pod:FindFirstChild("Base")
+                local spawn = base and base:FindFirstChild("Spawn")
+                if spawn then
+                    local dist = (spawn.Position - hrp.Position).Magnitude
+                    if dist < nd and dist <= 25 then
+                        local att = spawn:FindFirstChild("PromptAttachment")
+                        if att then
+                            for _, ch in ipairs(att:GetChildren()) do
+                                if ch:IsA("ProximityPrompt") then np=ch; nd=dist; break end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+    return np
+end
+
+local Toggles_AutoSteal = false
+
+local function startAutoSteal()
+    Toggles_AutoSteal = true
+    if Connections.steal then return end
+    Connections.steal = RunService.Heartbeat:Connect(function()
+        if not Toggles_AutoSteal then return end
+        if tick() - lastSteal < 0.3 then return end
+        local prompt = findNearestPrompt()
+        if prompt and prompt.Parent then
+            lastSteal = tick()
+            pcall(function() fireproximityprompt(prompt) end)
+        end
+    end)
+end
+
+local function stopAutoSteal()
+    Toggles_AutoSteal = false
+    if Connections.steal then Connections.steal:Disconnect(); Connections.steal = nil end
+end
+
 -- ──────────────────────────────────────────────────────────────
 -- GUI
 -- ──────────────────────────────────────────────────────────────
@@ -559,7 +623,7 @@ local function mkActionCard(line1, line2, cb)
 end
 
 -- Populate right panel
-mkCard("AUTO",  "GRAB",       "AutoSteal",  startAutoSteal,  stopAutoSteal)
+mkCard("AUTO",  "GRAB",       nil,  startAutoSteal,  stopAutoSteal)
 mkCard("BAT",   "AIMBOT",     "BatAimbot",  startAimbot,    stopAimbot)
 mkCard("AUTO",  "LEFT",       "AutoLeft",   startAutoLeft,  stopAutoLeft)
 mkCard("AUTO",  "RIGHT",      "AutoRight",  startAutoRight, stopAutoRight)
