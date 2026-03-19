@@ -829,3 +829,5 @@ Player.CharacterAdded:Connect(function()
 end)
 
 print("⚔ ALAZ DUEL Loaded!  U=Toggle  discord.gg/U4XXCxKUm")
+
+
